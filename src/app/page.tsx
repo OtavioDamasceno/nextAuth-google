@@ -6,6 +6,7 @@ export default function Home() {
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <Link href="/client">Pagina client component</Link>
       <Link href="/server">Pagina server component</Link>
+      <Link href="/middleware">Pagina com Middleware</Link>
     </div>
   );
 }

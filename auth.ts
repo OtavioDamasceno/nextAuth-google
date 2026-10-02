@@ -1,9 +1,27 @@
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
-import google from "next-auth/providers/google";
+import Google from "next-auth/providers/google";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "./prisma/db";
 
 const config = {
-  providers: [google],
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
+  providers: [Google],
+  callbacks: {
+    authorized({ request, auth }) {
+      const { pathname } = request.nextUrl;
+
+      if (
+        pathname === "/middleware" ||
+        pathname.startsWith("/middleware/")
+      ) {
+        return !!auth?.user;
+      }
+
+      return true;
+    },
+  },
 } satisfies NextAuthConfig;
 
-export const {handlers, auth, signIn, signOut} = NextAuth(config)
+export const { handlers, auth, signIn, signOut } = NextAuth(config);
